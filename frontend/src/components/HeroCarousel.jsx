@@ -49,7 +49,7 @@ export default function HeroCarousel() {
 
   return (
     <section
-      className="relative w-full h-[320px] sm:h-[400px] md:h-[500px] lg:h-[600px] xl:h-[650px] overflow-hidden bg-white select-none group"
+      className="relative w-full h-[300px] sm:h-[400px] md:h-[490px] lg:h-[560px] xl:h-[590px] overflow-hidden bg-white select-none group"
       aria-label="Hero Carousel"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
