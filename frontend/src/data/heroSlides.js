@@ -2,6 +2,7 @@ import pregnantWomanCare from '../assets/hero/pregnant-woman-care.jpg';
 import elderlyCareMale from '../assets/hero/elderly-care-male.jpg';
 import elderlyCareFemale from '../assets/hero/elderly-care-female.jpg';
 import newbornBabyCare from '../assets/hero/newborn-baby-care.jpg';
+import childCare from '../assets/hero/child-care.jpg';
 
 export const heroSlides = [
   {
@@ -23,5 +24,10 @@ export const heroSlides = [
     id: 4,
     image: newbornBabyCare,
     alt: 'Reeyansh Aya Care - Newborn Baby Care',
+  },
+  {
+    id: 5,
+    image: childCare,
+    alt: 'Reeyansh Aya Care - Child Care Services (Aged 2 to 7 Years)',
   },
 ];

@@ -9,9 +9,10 @@ const NAV_LINKS = [
   { to: '/services', label: 'Our Services', end: false },
   { to: '/gallery', label: 'Gallery', end: false },
   { to: '/contact', label: 'Contact Us', end: false },
+  { to: '/feedback', label: 'Feedback', end: false },
 ];
 
-export default function Navbar() {
+export default function Navbar({ onOpenBooking }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -76,25 +77,25 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* RIGHT: Book Now CTA Button */}
-          <div className="hidden md:flex items-center">
-            <Link
-              to="/book"
-              className="inline-flex items-center justify-center px-6 py-2.5 rounded-lg bg-blue-950 text-white text-sm font-medium hover:bg-blue-900 active:bg-blue-950 transition-colors duration-150 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-900"
+          {/* RIGHT: Book Now CTA Button & Mobile Menu Toggle */}
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <button
+              type="button"
+              id="navbar-book-now"
+              onClick={onOpenBooking}
+              className="inline-flex items-center justify-center px-3.5 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-2.5 rounded-lg bg-blue-950 text-white text-xs sm:text-sm font-medium hover:bg-blue-900 active:bg-blue-950 transition-colors duration-150 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-900 cursor-pointer whitespace-nowrap"
             >
               Book Now
-            </Link>
-          </div>
+            </button>
 
-          {/* MOBILE: Hamburger Button */}
-          <div className="flex md:hidden items-center">
+            {/* MOBILE: Hamburger Button */}
             <button
               type="button"
               onClick={() => setIsOpen((prev) => !prev)}
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
-              className="p-2 rounded-lg text-slate-700 hover:text-blue-950 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-900 cursor-pointer"
+              className="flex md:hidden p-2 rounded-lg text-slate-700 hover:text-blue-950 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-900 cursor-pointer"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -126,14 +127,6 @@ export default function Navbar() {
               </NavLink>
             ))}
           </nav>
-          <div className="pt-2">
-            <Link
-              to="/book"
-              className="w-full flex items-center justify-center px-5 py-3 rounded-lg bg-blue-950 text-white text-base font-medium hover:bg-blue-900 active:bg-blue-950 transition-colors duration-150 shadow-sm"
-            >
-              Book Now
-            </Link>
-          </div>
         </div>
       )}
     </header>

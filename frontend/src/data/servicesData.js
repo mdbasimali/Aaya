@@ -2,6 +2,7 @@ import elderlyFemaleImg from '../assets/hero/elderly-care-female.jpg';
 import elderlyMaleImg from '../assets/hero/elderly-care-male.jpg';
 import pregnantWomanImg from '../assets/hero/pregnant-woman-care.jpg';
 import newbornBabyImg from '../assets/hero/newborn-baby-care.jpg';
+import childCareImg from '../assets/hero/child-care.jpg';
 
 export const servicesData = {
   'old-woman-care': {
@@ -173,6 +174,49 @@ export const servicesData = {
       'Strict sanitization, clean uniforms, and hygiene-first approach',
       'Support for working parents and first-time mothers',
       '24/7 night coverage or day shifts tailored to your needs',
+    ],
+  },
+
+  'child-care': {
+    id: 'child-care',
+    title: 'Child Care (2 to 7 Years)',
+    category: 'Child Care',
+    badge: 'Aged 2 to 7 Years',
+    image: childCareImg,
+    tagline: 'Safe, nurturing, and engaging early child care where your child grows, learns, and smiles every day.',
+    overview:
+      'At Reeyansh Aya Care, our Child Care Services provide a loving, secure second home for children aged 2 to 7 years. Our trained caregivers combine attentive personal supervision with playful early learning, nutritious meals, structured homework assistance, and indoor/outdoor play, giving parents complete peace of mind.',
+    keyPoints: [
+      {
+        title: 'Day Care & Structured Routines',
+        desc: 'A dedicated daytime care environment providing safety, warmth, and reliable routines for children aged 2 to 7 years.',
+      },
+      {
+        title: 'Play & Learn Activities',
+        desc: 'Stimulating educational games, building blocks, puzzle-solving, storytelling, and creative early learning activities.',
+      },
+      {
+        title: 'Homework & Study Support',
+        desc: 'Patient, guided assistance with school assignments, handwriting, alphabet and number learning, and school readiness.',
+      },
+      {
+        title: 'Personal Care & Hygiene',
+        desc: 'Gentle help with handwashing, grooming, toilet training support, clean clothes changes, and healthy hygiene habits.',
+      },
+      {
+        title: 'Nutritious Meals & Snacks',
+        desc: 'Preparation and timely feeding of balanced, child-friendly wholesome meals, fresh fruit snacks, and proper hydration.',
+      },
+      {
+        title: 'Indoor & Outdoor Safe Play',
+        desc: 'Supervised physical games, motor skill exercises, social interaction, and safe movement in child-friendly spaces.',
+      },
+    ],
+    whyChoose: [
+      'Qualified, certified caregivers trained in child safety, gentle communication, and early development',
+      'Child-safe, clean, and hygienic environment with regular toy and surface sanitization',
+      'Daily activity, meal, and routine updates provided consistently to parents',
+      'Affordable & flexible schedules: full-day, half-day, or personalized shift arrangements',
     ],
   },
 };

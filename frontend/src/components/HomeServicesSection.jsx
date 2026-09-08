@@ -5,6 +5,7 @@ import elderlyFemaleImg from '../assets/hero/elderly-care-female.jpg';
 import elderlyMaleImg from '../assets/hero/elderly-care-male.jpg';
 import pregnantWomanImg from '../assets/hero/pregnant-woman-care.jpg';
 import newbornBabyImg from '../assets/hero/newborn-baby-care.jpg';
+import childCareImg from '../assets/hero/child-care.jpg';
 
 const SHORT_SERVICES = [
   {
@@ -31,6 +32,12 @@ const SHORT_SERVICES = [
     image: newbornBabyImg,
     description: 'Safe and loving care, feeding support and assistance for newborn babies.',
   },
+  {
+    id: 'child-care',
+    title: 'Child Care (2 to 7 Years)',
+    image: childCareImg,
+    description: 'Safe, nurturing, and engaging day-care & play-learning support for children.',
+  },
 ];
 
 export default function HomeServicesSection() {
@@ -51,8 +58,8 @@ export default function HomeServicesSection() {
           </p>
         </div>
 
-        {/* 4 Compact Service Cards (4 on desktop, 2 on tablet, 1 on mobile) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+        {/* 5 Compact Service Cards (5 on desktop, 3 on tablet, 2 on sm, 1 on mobile) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6 items-stretch">
           {SHORT_SERVICES.map((service) => (
             <div
               key={service.id}

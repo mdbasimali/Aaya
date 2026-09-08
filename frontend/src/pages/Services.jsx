@@ -13,6 +13,7 @@ import elderlyFemaleImg from '../assets/hero/elderly-care-female.jpg';
 import elderlyMaleImg from '../assets/hero/elderly-care-male.jpg';
 import pregnantWomanImg from '../assets/hero/pregnant-woman-care.jpg';
 import newbornBabyImg from '../assets/hero/newborn-baby-care.jpg';
+import childCareImg from '../assets/hero/child-care.jpg';
 
 const SERVICES = [
   {
@@ -67,6 +68,19 @@ const SERVICES = [
       'Growth Monitoring & 24/7 Assistance',
     ],
   },
+  {
+    id: 'child-care',
+    title: 'Child Care (2 to 7 Years)',
+    category: 'Child Care',
+    image: childCareImg,
+    description:
+      'Safe, nurturing, and engaging care for children aged 2 to 7 years, including day care routines, early play-learning activities, homework support, and nutritious meals.',
+    features: [
+      'Day Care (2 to 7 Years)',
+      'Play & Learn Activities',
+      'Nutritious Meals & Hygiene',
+    ],
+  },
 ];
 
 export default function Services() {
@@ -88,11 +102,11 @@ export default function Services() {
         </div>
       </section>
 
-      {/* ── 4 Main Services Grid ── */}
+      {/* ── 5 Main Services Grid ── */}
       <section className="py-14 sm:py-18 lg:py-20 bg-slate-50/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Responsive Layout: 4 on Desktop, 2 on Tablet, 1 on Mobile */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch">
+          {/* Responsive Layout: 5 on XL/Desktop, 3 on Tablet, 2 on Small Tablet, 1 on Mobile */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-6 items-stretch">
             {SERVICES.map((service) => (
               <div
                 key={service.id}
