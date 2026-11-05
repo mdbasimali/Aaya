@@ -1,0 +1,42 @@
+{
+  "name": "reeyansh-aya-care-backend",
+  "version": "1.0.0",
+  "description": "Production-ready backend API for Reeyansh Aya Care",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "create-admin": "node src/scripts/createAdmin.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.11.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.3.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^9.9.5",
+    "multer": "^2.3.0",
+    "nodemailer": "^6.9.16"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "keywords": [
+    "reeyansh",
+    "aya-care",
+    "home-care",
+    "backend",
+    "api"
+  ],
+  "author": "Reeyansh Aya Care",
+  "license": "UNLICENSED"
+}
