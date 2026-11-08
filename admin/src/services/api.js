@@ -5,13 +5,26 @@ const api = axios.create({
   withCredentials: true,
 });
 
+api.interceptors.request.use((reqConfig) => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('admin_token');
+    if (token) {
+      reqConfig.headers = reqConfig.headers || {};
+      reqConfig.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return reqConfig;
+});
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error?.response?.status === 401) {
-      // If unauthorized and not already on /login, redirect
-      if (typeof window !== 'undefined' && !window.location.pathname.endsWith('/login')) {
-        window.location.href = '/login';
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('admin_token');
+        if (!window.location.pathname.endsWith('/login')) {
+          window.location.href = '/login';
+        }
       }
     }
     return Promise.reject(error);

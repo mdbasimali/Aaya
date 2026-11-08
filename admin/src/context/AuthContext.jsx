@@ -10,11 +10,23 @@ export const AuthProvider = ({ children }) => {
   const navigate              = useNavigate();
 
   const checkAuth = useCallback(async () => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+
+    // If no stored token and on /login page, skip redundant call that causes console 401
+    if (!token && typeof window !== 'undefined' && window.location.pathname.endsWith('/login')) {
+      setAdmin(null);
+      setLoading(false);
+      return;
+    }
+
     try {
       const { data } = await api.get('/admin/auth/me');
       setAdmin(data.admin);
     } catch {
       setAdmin(null);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('admin_token');
+      }
     } finally {
       setLoading(false);
     }
@@ -24,6 +36,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const { data } = await api.post('/admin/auth/login', { email, password });
+    if (data.token && typeof window !== 'undefined') {
+      localStorage.setItem('admin_token', data.token);
+    }
     setAdmin(data.admin);
     return data;
   };
@@ -34,6 +49,9 @@ export const AuthProvider = ({ children }) => {
     } catch {
       // proceed even if logout call fails
     } finally {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('admin_token');
+      }
       setAdmin(null);
       navigate('/login', { replace: true });
     }

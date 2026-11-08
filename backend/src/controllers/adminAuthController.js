@@ -9,12 +9,15 @@ const parseDurationMs = (duration) => {
   return (map[unit] ?? 86_400_000) * value;
 };
 
-const cookieOptions = {
-  httpOnly: true,
-  secure: config.IS_PROD,
-  sameSite: config.IS_PROD ? 'none' : 'lax',
-  maxAge: parseDurationMs(config.JWT_EXPIRES_IN),
-  path: '/',
+const getCookieOptions = (req) => {
+  const isHttps = req.secure || req.headers['x-forwarded-proto'] === 'https' || config.IS_PROD;
+  return {
+    httpOnly: true,
+    secure: isHttps,
+    sameSite: isHttps ? 'none' : 'lax',
+    maxAge: parseDurationMs(config.JWT_EXPIRES_IN),
+    path: '/',
+  };
 };
 
 export const login = async (req, res, next) => {
@@ -48,11 +51,12 @@ export const login = async (req, res, next) => {
       expiresIn: config.JWT_EXPIRES_IN,
     });
 
-    res.cookie('admin_token', token, cookieOptions);
+    res.cookie('admin_token', token, getCookieOptions(req));
 
     return res.status(200).json({
       success: true,
       message: 'Login successful',
+      token, // Return token for cross-origin SPAs (works across all browsers including Brave & Safari)
       admin: {
         id: admin._id,
         name: admin.name,
@@ -65,11 +69,12 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const logout = (_req, res) => {
+export const logout = (req, res) => {
+  const isHttps = req.secure || req.headers['x-forwarded-proto'] === 'https' || config.IS_PROD;
   res.clearCookie('admin_token', {
     httpOnly: true,
-    secure: config.IS_PROD,
-    sameSite: config.IS_PROD ? 'none' : 'lax',
+    secure: isHttps,
+    sameSite: isHttps ? 'none' : 'lax',
     path: '/',
   });
   return res.status(200).json({ success: true, message: 'Logged out successfully' });
