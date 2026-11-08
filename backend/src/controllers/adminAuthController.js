@@ -14,6 +14,7 @@ const cookieOptions = {
   secure: config.IS_PROD,
   sameSite: config.IS_PROD ? 'none' : 'lax',
   maxAge: parseDurationMs(config.JWT_EXPIRES_IN),
+  path: '/',
 };
 
 export const login = async (req, res, next) => {
@@ -69,6 +70,7 @@ export const logout = (_req, res) => {
     httpOnly: true,
     secure: config.IS_PROD,
     sameSite: config.IS_PROD ? 'none' : 'lax',
+    path: '/',
   });
   return res.status(200).json({ success: true, message: 'Logged out successfully' });
 };

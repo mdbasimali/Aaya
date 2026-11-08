@@ -1,8 +1,36 @@
 const PORT     = parseInt(process.env.PORT || '5000', 10);
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const IS_PROD  = NODE_ENV === 'production';
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
-const ADMIN_URL  = process.env.ADMIN_URL  || 'http://localhost:5001';
+
+// Safely normalize origin: extracts scheme + host + port, removes path (e.g. /login) and trailing slashes
+const normalizeOrigin = (urlStr) => {
+  if (!urlStr || typeof urlStr !== 'string') return '';
+  const trimmed = urlStr.trim();
+  try {
+    const parsed = new URL(trimmed);
+    return parsed.origin;
+  } catch {
+    return trimmed.replace(/\/+$/, '');
+  }
+};
+
+const rawFrontendUrl = process.env.FRONTEND_URL || process.env.CLIENT_URL;
+const rawAdminUrl = process.env.ADMIN_URL;
+
+// Production validation: require FRONTEND_URL and ADMIN_URL in production
+if (IS_PROD) {
+  const missing = [];
+  if (!rawFrontendUrl) missing.push('FRONTEND_URL');
+  if (!rawAdminUrl) missing.push('ADMIN_URL');
+
+  if (missing.length > 0) {
+    console.error(`[CONFIG] Missing required production environment variable(s): ${missing.join(', ')}`);
+    process.exit(1);
+  }
+}
+
+const FRONTEND_URL = normalizeOrigin(rawFrontendUrl || (IS_PROD ? '' : 'http://localhost:5173'));
+const ADMIN_URL    = normalizeOrigin(rawAdminUrl || (IS_PROD ? '' : 'http://localhost:5001'));
 
 const RATE_LIMIT_WINDOW_MS = parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10);
 const RATE_LIMIT_MAX       = parseInt(process.env.RATE_LIMIT_MAX || '100', 10);
@@ -34,7 +62,8 @@ export const config = {
   PORT,
   NODE_ENV,
   IS_PROD,
-  CLIENT_URL,
+  FRONTEND_URL,
+  CLIENT_URL: FRONTEND_URL, // backwards compatibility
   ADMIN_URL,
   RATE_LIMIT_WINDOW_MS,
   RATE_LIMIT_MAX,

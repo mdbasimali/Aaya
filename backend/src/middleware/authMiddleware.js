@@ -4,7 +4,11 @@ import Admin from '../models/Admin.js';
 
 export const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.cookies?.admin_token;
+    let token = req.cookies?.admin_token;
+
+    if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+      token = req.headers.authorization.split(' ')[1];
+    }
 
     if (!token) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });

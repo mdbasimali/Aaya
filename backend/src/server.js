@@ -1,9 +1,9 @@
 import 'dotenv/config';
 import express from 'express';
 import helmet from 'helmet';
-import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { config } from './config/env.js';
+import { corsMiddleware, getAllowedOrigins } from './config/cors.js';
 import { connectDB, disconnectDB } from './config/database.js';
 import { globalApiLimiter } from './middleware/rateLimitMiddleware.js';
 import { notFoundMiddleware } from './middleware/notFoundMiddleware.js';
@@ -20,38 +20,56 @@ app.set('trust proxy', 1);
 
 app.use(helmet());
 
-const allowedOrigins = [
-  config.CLIENT_URL,
-  config.ADMIN_URL,
-  'http://localhost:5173',
-  'http://localhost:5001',
-].filter(Boolean);
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      console.warn(`[CORS] Rejected origin: ${origin}`);
-      callback(new Error('Not allowed by CORS'));
-    },
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  })
-);
+app.use(corsMiddleware);
 
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use(cookieParser());
 app.use(requestLogger);
+
+// Health check endpoints (exempt from general rate limiter for continuous monitoring & Render probes)
+app.use('/health', healthRoutes);
+app.use('/api/health', healthRoutes);
+
+// Root informational endpoints for Render root URL check and browser inspection
+app.get('/', (_req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Reeyansh Aya Care API is running',
+    version: '1.0.0',
+    environment: config.NODE_ENV,
+    endpoints: {
+      health: '/api/health',
+      gallery: '/api/gallery',
+      feedback: '/api/feedback',
+      adminAuth: '/api/admin/auth',
+      admin: '/api/admin',
+    },
+  });
+});
+
+app.get('/api', (_req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Reeyansh Aya Care API v1',
+    health: '/api/health',
+  });
+});
+
+// Apply rate limiting to API routes
 app.use('/api', globalApiLimiter);
 
-app.use('/api/health', healthRoutes);
+// Primary API routes
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/admin/auth', adminAuthRoutes);
 app.use('/api/admin', adminRoutes);
+
+// Resilient fallback aliases for clients whose base URL omits the /api prefix
+app.use('/gallery', globalApiLimiter, galleryRoutes);
+app.use('/feedback', feedbackRoutes);
+app.use('/admin/auth', adminAuthRoutes);
+app.use('/admin', adminRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
@@ -63,11 +81,16 @@ const startServer = async () => {
     await connectDB();
 
     server = app.listen(config.PORT, () => {
+      const origins = getAllowedOrigins();
+      const originLog = config.IS_PROD
+        ? origins.join(', ')
+        : `${origins.join(', ')} (plus localhost/* in development)`;
+
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log(`  🚀 Aaya Care API`);
       console.log(`  Env          : ${config.NODE_ENV}`);
       console.log(`  Listening    : http://localhost:${config.PORT}`);
-      console.log(`  Allowed origins: ${allowedOrigins.join(', ')}`);
+      console.log(`  Allowed origins: ${originLog}`);
       console.log(`  Health check : http://localhost:${config.PORT}/api/health`);
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     });
