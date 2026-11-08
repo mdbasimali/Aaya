@@ -49,6 +49,15 @@ console.log('\n--- Test Suite 3: Production Mode Security Checks ---');
 config.IS_PROD = true;
 assert(isOriginAllowed('https://aaya-delta.vercel.app'), 'Public frontend is allowed in production');
 assert(isOriginAllowed('https://aaya-adminpanel.vercel.app'), 'Admin panel is allowed in production');
+assert(
+  isOriginAllowed('https://aaya-adminpanel-m18djptt-mdbasimalis-projects.vercel.app'),
+  'Vercel deployment URL for admin panel is allowed'
+);
+assert(
+  isOriginAllowed('https://aaya-delta-git-main-mdbasimalis-projects.vercel.app'),
+  'Vercel deployment URL for frontend is allowed'
+);
+assert(!isOriginAllowed('https://another-project.vercel.app'), 'Unrelated Vercel projects are strictly blocked');
 assert(!isOriginAllowed('http://localhost:5173'), 'localhost:5173 is STRICTLY BLOCKED in production');
 assert(!isOriginAllowed('http://localhost:5001'), 'localhost:5001 is STRICTLY BLOCKED in production');
 assert(!isOriginAllowed('http://127.0.0.1:3000'), '127.0.0.1:3000 is STRICTLY BLOCKED in production');
@@ -134,6 +143,21 @@ const simulateCors = (method, origin, extraHeaders = {}) => {
   assert(
     preflightAdmin.headers['access-control-allow-credentials'] === 'true',
     'Preflight sets Access-Control-Allow-Credentials: true for admin'
+  );
+
+  // Test 4.2b: Preflight from Vercel deployment URL
+  const preflightVercelDeployment = await simulateCors('OPTIONS', 'https://aaya-adminpanel-m18djptt-mdbasimalis-projects.vercel.app', {
+    'access-control-request-method': 'POST',
+    'access-control-request-headers': 'content-type,authorization',
+  });
+  assert(preflightVercelDeployment.statusCode === 204, 'Preflight from Vercel deployment URL returns 204');
+  assert(
+    preflightVercelDeployment.headers['access-control-allow-origin'] === 'https://aaya-adminpanel-m18djptt-mdbasimalis-projects.vercel.app',
+    'Preflight sets Access-Control-Allow-Origin matching exact Vercel deployment URL'
+  );
+  assert(
+    preflightVercelDeployment.headers['access-control-allow-credentials'] === 'true',
+    'Preflight sets Access-Control-Allow-Credentials: true'
   );
 
   // Test 4.3: Preflight from unauthorized origin

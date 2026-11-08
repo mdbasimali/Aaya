@@ -4,6 +4,9 @@ import { config } from './env.js';
 // Matches standard local development origins: http://localhost:<port> or http://127.0.0.1:<port>
 const LOCALHOST_REGEX = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
 
+// Matches Vercel production domains and deployment/preview URLs for aaya-adminpanel and aaya-delta
+const VERCEL_DEPLOYMENT_REGEX = /^https:\/\/(aaya-adminpanel|aaya-delta)(-[a-z0-9-]+)?\.vercel\.app$/i;
+
 /**
  * Returns array of permitted production origins from configuration.
  * @returns {string[]}
@@ -26,17 +29,22 @@ export const isOriginAllowed = (origin) => {
   const normalizedOrigin = origin.trim().replace(/\/+$/, '');
   const allowedOrigins = getAllowedOrigins();
 
-  // In production, strictly allow only explicitly configured origins (never wildcard, never localhost)
-  if (config.IS_PROD) {
-    return allowedOrigins.includes(normalizedOrigin);
-  }
-
-  // In development, allow configured origins OR localhost / 127.0.0.1
+  // Allow explicitly configured origins
   if (allowedOrigins.includes(normalizedOrigin)) {
     return true;
   }
 
-  return LOCALHOST_REGEX.test(normalizedOrigin);
+  // Allow official Vercel production and deployment/preview URLs for aaya-adminpanel & aaya-delta
+  if (VERCEL_DEPLOYMENT_REGEX.test(normalizedOrigin)) {
+    return true;
+  }
+
+  // In development, allow localhost / 127.0.0.1
+  if (!config.IS_PROD && LOCALHOST_REGEX.test(normalizedOrigin)) {
+    return true;
+  }
+
+  return false;
 };
 
 /**
