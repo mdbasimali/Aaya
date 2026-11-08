@@ -147,3 +147,4 @@ export const createServiceSchema = (service) => ({
     availability: 'https://schema.org/InStock',
   },
 });
+

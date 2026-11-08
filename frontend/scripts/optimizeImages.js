@@ -34,3 +34,4 @@ for (const relPath of images) {
     console.log(`Skipped ${relPath}: already optimal`);
   }
 }
+
