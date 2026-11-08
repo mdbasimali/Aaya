@@ -7,6 +7,9 @@ const LOCALHOST_REGEX = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
 // Matches Vercel production domains and deployment/preview URLs for aaya-adminpanel and aaya-delta
 const VERCEL_DEPLOYMENT_REGEX = /^https:\/\/(aaya-adminpanel|aaya-delta)(-[a-z0-9-]+)?\.vercel\.app$/i;
 
+// Matches official custom domains and subdomains (https://reeyanshayacare.in, https://admin.reeyanshayacare.in, etc.)
+const CUSTOM_DOMAINS_REGEX = /^https:\/\/(www\.|admin\.)?reeyanshayacare\.(in|info)$/i;
+
 /**
  * Returns array of permitted production origins from configuration.
  * @returns {string[]}
@@ -31,6 +34,11 @@ export const isOriginAllowed = (origin) => {
 
   // Allow explicitly configured origins
   if (allowedOrigins.includes(normalizedOrigin)) {
+    return true;
+  }
+
+  // Allow official custom domains
+  if (CUSTOM_DOMAINS_REGEX.test(normalizedOrigin)) {
     return true;
   }
 

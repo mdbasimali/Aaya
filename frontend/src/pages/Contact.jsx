@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import SEO from '../components/SEO';
+import { createBreadcrumbSchema } from '../data/seoSchemas';
 import {
   Mail,
   Phone,
@@ -119,8 +121,21 @@ export default function Contact() {
     setForm({ name: '', phone: '', message: '' });
   }
 
+  const breadcrumbs = createBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Contact Us', url: '/contact' },
+  ]);
+
   return (
     <div className="min-h-screen bg-slate-50">
+      <SEO
+        title="Contact Reeyansh Aya Care Rampurhat | Phone, WhatsApp & Address"
+        description="Contact Reeyansh Aya Care in Rampurhat Bharsala near BLRO Office, West Bengal. Call or WhatsApp +91 90465 85943 for trusted elderly, infant, pregnancy, and child care."
+        canonical="/contact"
+        keywords="Contact Reeyansh Aya Care, Rampurhat Aya Care phone number, Reeyansh Aya Care address, Aya service WhatsApp Rampurhat, Home care agency Rampurhat Birbhum"
+        schema={breadcrumbs}
+      />
+
       {/* ── HERO HEADER ── */}
       <section className="bg-blue-950 py-16 px-4 text-center">
         <div className="max-w-2xl mx-auto">
@@ -128,11 +143,10 @@ export default function Contact() {
             Get In Touch
           </span>
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4 leading-tight">
-            Contact Us
+            Contact Reeyansh Aya Care in Rampurhat
           </h1>
           <p className="text-blue-200 text-base sm:text-lg leading-relaxed">
-            We're here to help. Get in touch with Reeyansh Aya Care for trusted
-            home-care support.
+            We're here to help. Reach out to our Rampurhat center for trusted home caregiver services across Birbhum and West Bengal.
           </p>
         </div>
       </section>

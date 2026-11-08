@@ -1,0 +1,12 @@
+# Robots.txt for Reeyansh Aya Care
+# Primary Canonical Domain: https://reeyanshayacare.in
+
+User-agent: *
+Allow: /
+
+# Disallow internal redirecting route and backend API paths
+Disallow: /book$
+Disallow: /api/
+
+# Primary XML Sitemap
+Sitemap: https://reeyanshayacare.in/sitemap.xml

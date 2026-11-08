@@ -1,3 +1,5 @@
+import SEO from '../components/SEO';
+import { createBreadcrumbSchema } from '../data/seoSchemas';
 import { Link } from 'react-router-dom';
 import {
   Heart,
@@ -84,8 +86,21 @@ const SERVICES = [
 ];
 
 export default function Services() {
+  const breadcrumbs = createBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+  ]);
+
   return (
     <div className="bg-white text-slate-900">
+      <SEO
+        title="Our Caregiver Services in Rampurhat & West Bengal | Reeyansh Aya Care"
+        description="Explore our 5 verified caregiver services in Rampurhat, WB: Old Woman Care, Old Man Care, Pregnancy Woman Care, Newborn Baby Care, and Child Care (2 to 7 Years)."
+        canonical="/services"
+        keywords="Aya Care Services in Rampurhat, Home Care Services in Rampurhat, Elderly Care Services in Rampurhat, Old Woman Care in Rampurhat, Old Man Care in Rampurhat, Newborn Baby Care in Rampurhat, Pregnancy Woman Care in Rampurhat, Child Care Services in Rampurhat, Caregiver Services in West Bengal"
+        schema={breadcrumbs}
+      />
+
       {/* ── Page Header / Hero ── */}
       <section className="bg-gradient-to-b from-pink-50/60 via-white to-slate-50/40 py-12 sm:py-16 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -94,10 +109,10 @@ export default function Services() {
             Our Services
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-blue-950 mb-4">
-            Compassionate Home-Care Services
+            Aya &amp; Home Caregiver Services in Rampurhat &amp; West Bengal
           </h1>
           <p className="max-w-2xl mx-auto text-slate-600 text-base sm:text-lg leading-relaxed">
-            Personalized, trustworthy, and respectful care services tailored for every family need — from elderly support to maternity and newborn care.
+            Personalized, trustworthy, and respectful in-home aya support across Rampurhat, Birbhum, and West Bengal — from senior elderly care to newborn and pregnancy assistance.
           </p>
         </div>
       </section>
@@ -116,9 +131,12 @@ export default function Services() {
                 <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100">
                   <img
                     src={service.image}
-                    alt={service.title}
+                    alt={`${service.title} - Reeyansh Aya Care Services in Rampurhat West Bengal`}
                     className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
+                    decoding="async"
+                    width="400"
+                    height="240"
                   />
                   <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs px-3 py-1 rounded-full text-xs font-semibold text-blue-950 shadow-sm border border-slate-100">
                     {service.category}

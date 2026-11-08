@@ -51,13 +51,13 @@ export default function AboutSection() {
             {/* Content Paragraphs */}
             <div className="space-y-4 text-slate-600 text-base sm:text-lg leading-relaxed mb-8">
               <p>
-                At <strong className="text-slate-900 font-semibold">Reeyansh AYA Care</strong>, we provide reliable and compassionate care support for pregnant women, newborn babies, elderly people, and families.
+                Based in Rampurhat (Birbhum, West Bengal), at <strong className="text-slate-900 font-semibold">Reeyansh Aya Care</strong>, we provide reliable and compassionate home care support for elderly seniors, newborn babies, pregnant mothers, and growing children.
               </p>
               <p>
-                Our trained caregivers are here to help with daily care, personal support, hygiene, companionship, and other essential needs. We focus on providing safe, respectful, and comfortable care at home.
+                Our trained caregivers assist with daily personal care, hygiene, mobility, medication reminders, meal support, and attentive companionship. We focus on delivering safe, respectful, and dignified in-home caregiving tailored to every family's routine.
               </p>
               <p className="font-medium text-slate-800 border-l-4 border-pink-500 pl-4 py-1.5 bg-white rounded-r-lg shadow-xs">
-                Our goal is simple — to make every family feel safe, supported, and cared for.
+                Our goal is simple — to provide families in Rampurhat and across West Bengal complete peace of mind.
               </p>
             </div>
 
@@ -104,9 +104,12 @@ export default function AboutSection() {
             <div className="w-full max-w-md sm:max-w-lg lg:max-w-none rounded-2xl md:rounded-3xl overflow-hidden shadow-lg border border-slate-200/80 bg-white transition-all duration-300">
               <img
                 src={aboutImage}
-                alt="Reeyansh AYA Care - Elderly Care Services"
+                alt="Reeyansh Aya Care - Compassionate in-home elderly care in Rampurhat West Bengal"
                 className="w-full h-auto object-contain rounded-2xl md:rounded-3xl block select-none"
                 loading="lazy"
+                decoding="async"
+                width="1600"
+                height="1066"
               />
             </div>
           </div>

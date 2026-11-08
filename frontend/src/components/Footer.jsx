@@ -62,8 +62,12 @@ export default function Footer() {
             <Link to="/" className="inline-block mb-4">
               <img
                 src={logoImg}
-                alt="Reeyansh Aya Care"
+                alt="Reeyansh Aya Care - Caregiver Services in Rampurhat West Bengal"
                 className="h-12 w-auto object-contain"
+                width="160"
+                height="48"
+                loading="lazy"
+                decoding="async"
               />
             </Link>
             <p className="text-sm leading-relaxed text-slate-400 mb-5">

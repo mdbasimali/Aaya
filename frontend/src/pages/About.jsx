@@ -1,3 +1,5 @@
+import SEO from '../components/SEO';
+import { createBreadcrumbSchema } from '../data/seoSchemas';
 import { Link } from 'react-router-dom';
 import {
   UserCheck,
@@ -37,8 +39,21 @@ const WHY_CHOOSE_US = [
 ];
 
 export default function About() {
+  const breadcrumbs = createBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'About Us', url: '/about' },
+  ]);
+
   return (
     <div className="bg-white text-slate-900">
+      <SEO
+        title="About Reeyansh Aya Care | Trusted Caregiver Agency in Rampurhat, WB"
+        description="Learn about Reeyansh Aya Care, Rampurhat's premier home care provider. Verified, compassionate caregivers supporting families across Rampurhat, Birbhum, and West Bengal."
+        canonical="/about"
+        keywords="About Reeyansh Aya Care, Caregiver Agency in Rampurhat, Home Care Services in Rampurhat, Aya Centre in Rampurhat, Caregiver Services in West Bengal, Home Care Agency Birbhum, Verified Aya Care West Bengal"
+        schema={breadcrumbs}
+      />
+
       {/* ── Section 1: Hero / Overview ── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-pink-50/50 via-white to-slate-50/40 py-12 sm:py-16 lg:py-20 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,15 +68,15 @@ export default function About() {
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-blue-950 leading-tight mb-6">
                 Caring Hands.{' '}
                 <span className="text-pink-600">Trusted Support.</span>
-                <br className="hidden sm:inline" /> Better Living.
+                <br className="hidden sm:inline" /> In Rampurhat &amp; West Bengal.
               </h1>
 
               <div className="space-y-4 text-slate-600 text-base sm:text-lg leading-relaxed mb-8">
                 <p>
-                  <strong className="text-blue-950 font-semibold">Reeyansh Aya Care</strong> provides trusted and compassionate home-care support for pregnant women, newborn babies, and elderly family members. Our trained caregivers provide reliable day-to-day assistance while focusing on comfort, dignity, safety, and personal care.
+                  Located in <strong className="text-blue-950 font-semibold">Rampurhat Bharsala (near BLRO Office, Birbhum, West Bengal)</strong>, <strong className="text-blue-950 font-semibold">Reeyansh Aya Care</strong> provides trusted, background-verified, and compassionate in-home caregiver support for elderly seniors, newborn babies, expectant mothers, and growing children.
                 </p>
                 <p>
-                  We understand that every family has different needs. That's why we provide personalized support with a caring and respectful approach, helping families feel comfortable and confident while their loved ones receive the care they deserve.
+                  Whether serving local households right here in Rampurhat or assisting families with regional home-care needs across Birbhum and West Bengal, our caregivers assist with daily routines, mobility, hygiene, medication tracking, and warm companionship.
                 </p>
               </div>
 
@@ -89,9 +104,12 @@ export default function About() {
                 <div className="rounded-2xl md:rounded-3xl overflow-hidden shadow-lg border border-slate-200/80 bg-white">
                   <img
                     src={aboutImage}
-                    alt="Reeyansh Aya Care - Compassionate care for families and seniors"
+                    alt="Reeyansh Aya Care - Verified caregivers supporting seniors and families in Rampurhat West Bengal"
                     className="w-full h-auto object-contain block select-none"
                     loading="eager"
+                    decoding="async"
+                    width="1600"
+                    height="1066"
                   />
                 </div>
               </div>

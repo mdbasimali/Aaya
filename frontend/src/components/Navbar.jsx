@@ -48,8 +48,11 @@ export default function Navbar({ onOpenBooking }) {
             >
               <img
                 src={logoImg}
-                alt="Reeyansh AYA CARE"
+                alt="Reeyansh Aya Care Logo - Home Care Services in Rampurhat"
                 className="h-11 sm:h-13 w-auto object-contain select-none"
+                width="180"
+                height="52"
+                decoding="async"
               />
             </Link>
           </div>

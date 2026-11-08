@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Star, CheckCircle2, AlertCircle, Loader2, Heart } from 'lucide-react';
+import SEO from '../components/SEO';
+import { createBreadcrumbSchema } from '../data/seoSchemas';
 import api from '../services/api';
 
 export default function Feedback() {
@@ -68,8 +70,21 @@ export default function Feedback() {
     }
   };
 
+  const breadcrumbs = createBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Feedback', url: '/feedback' },
+  ]);
+
   return (
     <div className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto flex-1 w-full">
+      <SEO
+        title="Family Feedback & Reviews | Reeyansh Aya Care Rampurhat"
+        description="Share and read genuine feedback from families who trust Reeyansh Aya Care for compassionate elderly, newborn, pregnancy, and child care in Rampurhat & West Bengal."
+        canonical="/feedback"
+        keywords="Reeyansh Aya Care Feedback, Reviews Reeyansh Aya Care, Caregiver reviews Rampurhat, Aya Care reviews West Bengal"
+        schema={breadcrumbs}
+      />
+
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-50 border border-pink-200/70 text-pink-600 text-xs font-semibold uppercase tracking-wider mb-3">

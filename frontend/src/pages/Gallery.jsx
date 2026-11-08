@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Images, Loader2, RefreshCw } from 'lucide-react';
+import SEO from '../components/SEO';
+import { createBreadcrumbSchema } from '../data/seoSchemas';
 import api from '../services/api';
 import MediaCard from '../components/MediaCard';
 import MediaLightbox from '../components/MediaLightbox';
@@ -49,8 +51,21 @@ export default function Gallery() {
     }
   };
 
+  const breadcrumbs = createBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Gallery', url: '/gallery' },
+  ]);
+
   return (
     <div className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex-1 w-full">
+      <SEO
+        title="Care Moments & Gallery | Reeyansh Aya Care Rampurhat"
+        description="View real photos and moments showcasing trusted home care and caregiver services in Rampurhat, Birbhum, and across West Bengal."
+        canonical="/gallery"
+        keywords="Reeyansh Aya Care Gallery, Caregiver photos Rampurhat, Elderly Care Rampurhat moments, Aya Care West Bengal photos"
+        schema={breadcrumbs}
+      />
+
       {/* Page Header */}
       <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-50 border border-pink-200/70 text-pink-600 text-xs font-semibold uppercase tracking-wider mb-3">

@@ -49,6 +49,9 @@ console.log('\n--- Test Suite 3: Production Mode Security Checks ---');
 config.IS_PROD = true;
 assert(isOriginAllowed('https://aaya-delta.vercel.app'), 'Public frontend is allowed in production');
 assert(isOriginAllowed('https://aaya-adminpanel.vercel.app'), 'Admin panel is allowed in production');
+assert(isOriginAllowed('https://reeyanshayacare.in'), 'Custom domain https://reeyanshayacare.in is allowed');
+assert(isOriginAllowed('https://admin.reeyanshayacare.in'), 'Custom admin domain https://admin.reeyanshayacare.in is allowed');
+assert(isOriginAllowed('https://reeyanshayacare.info'), 'Alternative domain https://reeyanshayacare.info is allowed');
 assert(
   isOriginAllowed('https://aaya-adminpanel-m18djptt-mdbasimalis-projects.vercel.app'),
   'Vercel deployment URL for admin panel is allowed'

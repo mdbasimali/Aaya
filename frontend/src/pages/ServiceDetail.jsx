@@ -1,3 +1,5 @@
+import SEO from '../components/SEO';
+import { createBreadcrumbSchema, createServiceSchema } from '../data/seoSchemas';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -32,21 +34,44 @@ export default function ServiceDetail() {
     );
   }
 
+  const breadcrumbs = createBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: service.title, url: `/services/${service.id}` },
+  ]);
+
+  const serviceSchema = createServiceSchema(service);
+
   return (
     <div className="bg-white text-slate-900">
+      <SEO
+        title={`${service.title} in Rampurhat | Reeyansh Aya Care West Bengal`}
+        description={`${service.tagline} Professional in-home ${service.title.toLowerCase()} in Rampurhat, Birbhum, and across West Bengal. Experienced caregivers, strict hygiene, and 24/7 support.`}
+        canonical={`/services/${service.id}`}
+        keywords={`${service.title} in Rampurhat, ${service.title} in West Bengal, ${service.title} Services Birbhum, Aya Care Services Rampurhat, Home Care Services Rampurhat`}
+        schema={{
+          '@context': 'https://schema.org',
+          '@graph': [breadcrumbs, serviceSchema],
+        }}
+      />
+
       {/* ── Top Header / Breadcrumb & Service Hero ── */}
       <section className="relative bg-gradient-to-b from-pink-50/60 via-white to-slate-50/40 py-10 sm:py-14 lg:py-16 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back to Services link */}
-          <div className="mb-6">
-            <Link
-              to="/services"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-pink-600 transition-colors group"
-            >
-              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-              <span>Back to All Services</span>
-            </Link>
-          </div>
+          {/* Back to Services link & Semantic Breadcrumbs */}
+          <nav aria-label="Breadcrumb" className="mb-6">
+            <ol className="flex items-center gap-2 text-xs sm:text-sm text-slate-500">
+              <li>
+                <Link to="/" className="hover:text-pink-600 transition-colors">Home</Link>
+              </li>
+              <li>/</li>
+              <li>
+                <Link to="/services" className="hover:text-pink-600 transition-colors">Services</Link>
+              </li>
+              <li>/</li>
+              <li className="font-semibold text-blue-950" aria-current="page">{service.title}</li>
+            </ol>
+          </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             {/* Left Column: Info & CTA */}
@@ -92,9 +117,12 @@ export default function ServiceDetail() {
               <div className="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border border-slate-200/80 bg-white">
                 <img
                   src={service.image}
-                  alt={service.title}
+                  alt={`${service.title} - Reeyansh Aya Care professional service in Rampurhat West Bengal`}
                   className="w-full h-auto object-contain block select-none"
                   loading="eager"
+                  decoding="async"
+                  width="800"
+                  height="600"
                 />
               </div>
 

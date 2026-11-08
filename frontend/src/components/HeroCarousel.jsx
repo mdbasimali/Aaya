@@ -78,6 +78,10 @@ export default function HeroCarousel() {
               alt={slide.alt}
               className="w-full h-full object-cover object-top select-none"
               loading={index === 0 ? 'eager' : 'lazy'}
+              fetchPriority={index === 0 ? 'high' : 'auto'}
+              decoding={index === 0 ? 'sync' : 'async'}
+              width="1600"
+              height="590"
               draggable={false}
             />
             {/* Subtle 18% Dark Transparent Overlay */}
@@ -89,9 +93,12 @@ export default function HeroCarousel() {
       {/* ── Center Overlay: "Welcome to Reeyansh Aya Care" + "About" Button ── */}
       <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 pointer-events-none">
         <div className="max-w-2xl mx-auto flex flex-col items-center animate-fade-in">
-          <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)] mb-3 sm:mb-5">
+          <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)] mb-2 sm:mb-3">
             Welcome to Reeyansh Aya Care
           </h1>
+          <p className="text-xs sm:text-sm md:text-base font-medium text-pink-100 max-w-xl mx-auto drop-shadow-md mb-3 sm:mb-5">
+            Trusted Aya &amp; In-Home Caregiver Services in Rampurhat &amp; Across West Bengal
+          </p>
           <Link
             to="/about"
             className="pointer-events-auto inline-flex items-center justify-center px-5 sm:px-7 py-2 sm:py-3 rounded-full bg-blue-950/90 hover:bg-blue-900 text-white text-xs sm:text-base font-semibold shadow-lg hover:shadow-xl border border-white/30 backdrop-blur-xs transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"

@@ -51,10 +51,10 @@ export default function HomeServicesSection() {
             Our Services
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-blue-950 mb-3">
-            Care That Fits Your Family’s Needs
+            Our Caregiver Services in Rampurhat &amp; West Bengal
           </h2>
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            Explore our specialized home-care services tailored for your loved ones at every stage of life.
+            Professional in-home aya and caregiver support across Rampurhat, Birbhum, and West Bengal at every stage of family life.
           </p>
         </div>
 
@@ -69,9 +69,12 @@ export default function HomeServicesSection() {
               <div className="relative h-40 sm:h-44 w-full overflow-hidden bg-slate-100">
                 <img
                   src={service.image}
-                  alt={service.title}
+                  alt={`${service.title} - Reeyansh Aya Care Services in Rampurhat West Bengal`}
                   className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105 select-none"
                   loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="240"
                 />
               </div>
 
