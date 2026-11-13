@@ -3,6 +3,7 @@ import Gallery from '../models/Gallery.js';
 import { uploadImage, uploadVideo, deleteAsset, deleteMedia } from '../services/cloudinaryService.js';
 import { isImageType, isVideoType } from '../middleware/uploadMiddleware.js';
 import { config } from '../config/env.js';
+import { createNotification } from '../services/notificationService.js';
 
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id);
 
@@ -126,6 +127,15 @@ export const createGalleryItem = async (req, res, next) => {
       return next(dbErr);
     }
 
+    await createNotification({
+      title: 'Gallery Media Added',
+      message: `New ${mediaType} "${item.title || 'Untitled'}" was uploaded to the gallery.`,
+      type: 'gallery',
+      action: 'gallery_added',
+      link: '/gallery',
+      metadata: { galleryId: item._id, mediaType },
+    });
+
     return res.status(201).json({
       success: true,
       message: 'Gallery item uploaded successfully.',
@@ -210,6 +220,15 @@ export const updateGalleryItem = async (req, res, next) => {
       await deleteAsset(existing.cloudinaryPublicId, existing.resourceType || 'image');
     }
 
+    await createNotification({
+      title: 'Gallery Content Updated',
+      message: `Gallery item "${item.title || 'Untitled'}" details or status was updated.`,
+      type: 'gallery',
+      action: 'gallery_updated',
+      link: '/gallery',
+      metadata: { galleryId: item._id },
+    });
+
     return res.status(200).json({
       success: true,
       message: 'Gallery item updated successfully.',
@@ -249,6 +268,15 @@ export const deleteGalleryItem = async (req, res, next) => {
     // Permanently remove from MongoDB
     try {
       await Gallery.findByIdAndDelete(id);
+
+      await createNotification({
+        title: 'Gallery Content Deleted',
+        message: `Gallery media "${item.title || 'Untitled'}" was deleted permanently.`,
+        type: 'gallery',
+        action: 'gallery_deleted',
+        link: '/gallery',
+        metadata: { galleryId: id },
+      });
     } catch (dbErr) {
       console.error(`[GALLERY-DELETE] MongoDB delete failed for ID "${id}":`, dbErr.message);
       return res.status(500).json({

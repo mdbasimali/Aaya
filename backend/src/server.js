@@ -14,6 +14,9 @@ import adminAuthRoutes from './routes/adminAuthRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import galleryRoutes from './routes/galleryRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
+import staffRoutes from './routes/staffRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
 
 const app = express();
 app.set('trust proxy', 1);
@@ -44,6 +47,9 @@ app.get('/', (_req, res) => {
       feedback: '/api/feedback',
       adminAuth: '/api/admin/auth',
       admin: '/api/admin',
+      staff: '/api/admin/staff',
+      notifications: '/api/admin/notifications',
+      bookings: '/api/bookings',
     },
   });
 });
@@ -60,15 +66,21 @@ app.get('/api', (_req, res) => {
 app.use('/api', globalApiLimiter);
 
 // Primary API routes
+app.use('/api/bookings', bookingRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/admin/auth', adminAuthRoutes);
+app.use('/api/admin/staff', staffRoutes);
+app.use('/api/admin/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Resilient fallback aliases for clients whose base URL omits the /api prefix
+app.use('/bookings', bookingRoutes);
 app.use('/gallery', globalApiLimiter, galleryRoutes);
 app.use('/feedback', feedbackRoutes);
 app.use('/admin/auth', adminAuthRoutes);
+app.use('/admin/staff', staffRoutes);
+app.use('/admin/notifications', notificationRoutes);
 app.use('/admin', adminRoutes);
 
 app.use(notFoundMiddleware);

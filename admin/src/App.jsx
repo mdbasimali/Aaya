@@ -3,8 +3,12 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminLayout from './components/AdminLayout';
 import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import BookingsAdmin from './pages/BookingsAdmin';
+import StaffAdmin from './pages/StaffAdmin';
 import Gallery from './pages/Gallery';
 import FeedbackAdmin from './pages/FeedbackAdmin';
+import SettingsAdmin from './pages/SettingsAdmin';
 
 function App() {
   return (
@@ -15,6 +19,39 @@ function App() {
           <Route path="/login" element={<Login />} />
 
           {/* Protected admin routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminLayout>
+                  <Dashboard />
+                </AdminLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/bookings"
+            element={
+              <ProtectedRoute>
+                <AdminLayout>
+                  <BookingsAdmin />
+                </AdminLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/staff"
+            element={
+              <ProtectedRoute>
+                <AdminLayout>
+                  <StaffAdmin />
+                </AdminLayout>
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/gallery"
             element={
@@ -37,11 +74,22 @@ function App() {
             }
           />
 
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <AdminLayout>
+                  <SettingsAdmin />
+                </AdminLayout>
+              </ProtectedRoute>
+            }
+          />
+
           {/* Root redirect */}
-          <Route path="/" element={<Navigate to="/gallery" replace />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
           {/* Fallback route */}
-          <Route path="*" element={<Navigate to="/gallery" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

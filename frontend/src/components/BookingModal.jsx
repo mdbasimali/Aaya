@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { X, MessageCircle, AlertCircle } from 'lucide-react';
+import { X, MessageCircle, AlertCircle, Loader2 } from 'lucide-react';
 import bookingBg from '../assets/booking-bg.jpg';
+import api from '../services/api';
 
 /* ── Constants ── */
 const WA_NUMBER = '919046585943';
@@ -38,8 +39,9 @@ function validatePhone(raw) {
 
 function buildWAMessage(f) {
   return encodeURIComponent(
-    `Hello Reeyansh Aya Care,\n\nI would like to book a care service.\n\n` +
-    `Name: ${f.name}\nPhone: ${f.phone}\nService: ${f.service}\n` +
+    `Hello Reeyansh Aya Care,\n\nI would like to book a care service.` +
+    (f.bookingId ? `\n*Booking ID:* ${f.bookingId}` : '') +
+    `\n\nName: ${f.name}\nPhone: ${f.phone}\nService: ${f.service}\n` +
     `Start Date: ${f.startDate}\nDuration: ${f.days} day(s)\n` +
     `Preferred Time: ${f.time}\nAddress: ${f.address}\n` +
     (f.requirements ? `Requirements: ${f.requirements}\n` : '') +
@@ -81,22 +83,29 @@ function Label({ htmlFor, children }) {
 export default function BookingModal({ isOpen, onClose }) {
   const [form, setForm] = useState(EMPTY);
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState('');
   const backdropRef = useRef(null);
 
   /* Body scroll lock + form reset */
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
-    if (!isOpen) { setForm(EMPTY); setErrors({}); }
+    if (!isOpen) {
+      setForm(EMPTY);
+      setErrors({});
+      setSubmitting(false);
+      setServerError('');
+    }
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
   /* Escape key close */
   useEffect(() => {
     if (!isOpen) return;
-    const h = (e) => { if (e.key === 'Escape') onClose(); };
+    const h = (e) => { if (e.key === 'Escape' && !submitting) onClose(); };
     document.addEventListener('keydown', h);
     return () => document.removeEventListener('keydown', h);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, submitting]);
 
   if (!isOpen) return null;
 
@@ -105,6 +114,7 @@ export default function BookingModal({ isOpen, onClose }) {
     const { name, value } = e.target;
     setForm(p => ({ ...p, [name]: value }));
     if (errors[name]) setErrors(p => ({ ...p, [name]: '' }));
+    if (serverError) setServerError('');
   }
 
   function validate() {
@@ -122,24 +132,61 @@ export default function BookingModal({ isOpen, onClose }) {
     return e;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+    if (submitting) return;
+
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
+
+    setSubmitting(true);
+    setServerError('');
+
+    let generatedBookingId = '';
+    try {
+      const res = await api.post('/bookings', {
+        clientName: form.name.trim(),
+        clientPhone: form.phone.trim(),
+        service: form.service,
+        startDate: form.startDate,
+        durationDays: parseInt(form.days, 10) || 1,
+        timeSlot: form.time,
+        address: form.address.trim(),
+        requirements: form.requirements.trim(),
+      });
+
+      if (res.data?.success && res.data?.data?.bookingId) {
+        generatedBookingId = res.data.data.bookingId;
+      }
+    } catch (err) {
+      console.warn('Booking record save warning:', err);
+      const errMsg = err?.response?.data?.message || 'Unable to submit booking. Please check your connection and try again.';
+      setServerError(errMsg);
+      setSubmitting(false);
+      return;
+    }
+
     const msg = buildWAMessage({
       ...form,
       name: form.name.trim(),
       phone: form.phone.trim(),
       address: form.address.trim(),
       requirements: form.requirements.trim(),
+      bookingId: generatedBookingId,
     });
-    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank', 'noopener,noreferrer');
+
+    try {
+      window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank', 'noopener,noreferrer');
+    } catch (waErr) {
+      console.warn('WhatsApp window open failed:', waErr);
+    }
+    setSubmitting(false);
     onClose();
   }
 
   /* Close on backdrop click only */
   function handleBackdropClick(e) {
-    if (e.target === backdropRef.current) onClose();
+    if (e.target === backdropRef.current && !submitting) onClose();
   }
 
   const base = 'w-full px-3 py-2.5 rounded-lg border text-sm text-slate-800 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 transition-all duration-150';
@@ -218,6 +265,12 @@ export default function BookingModal({ isOpen, onClose }) {
           {/* ── WHITE FORM CARD — sits below the heading, still inside modal ── */}
           <div className="mx-4 sm:mx-8 mb-7 bg-white rounded-2xl shadow-2xl">
             <div className="px-5 sm:px-8 py-6">
+              {serverError && (
+                <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                  <span>{serverError}</span>
+                </div>
+              )}
               <form id="bm-form" onSubmit={handleSubmit} noValidate>
 
                 {/* Row 1: Full Name | Phone Number */}
@@ -306,13 +359,23 @@ export default function BookingModal({ isOpen, onClose }) {
                 <button
                   type="submit"
                   id="booking-modal-submit"
-                  className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl bg-green-600 hover:bg-green-500 active:bg-green-700 text-white font-bold text-sm tracking-wide transition-colors duration-150 shadow-md"
+                  disabled={submitting}
+                  className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl bg-green-600 hover:bg-green-500 active:bg-green-700 text-white font-bold text-sm tracking-wide transition-colors duration-150 shadow-md disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                 >
-                  <MessageCircle className="w-5 h-5" />
-                  Book Now on WhatsApp
+                  {submitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Saving & Opening WhatsApp...</span>
+                    </>
+                  ) : (
+                    <>
+                      <MessageCircle className="w-5 h-5" />
+                      <span>Book Now on WhatsApp</span>
+                    </>
+                  )}
                 </button>
                 <p className="text-center text-xs text-slate-400 mt-2.5">
-                  Opens WhatsApp with your booking details pre-filled.
+                  Securely registers your booking in our system and opens WhatsApp with your prefilled details.
                 </p>
 
               </form>

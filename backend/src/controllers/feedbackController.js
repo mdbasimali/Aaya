@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Feedback from '../models/Feedback.js';
+import { createNotification } from '../services/notificationService.js';
 import {
   getClientIp,
   recordIpCooldown,
@@ -79,12 +80,22 @@ export const submitFeedback = async (req, res, next) => {
     }
 
     // 6. Save feedback (isApproved is ALWAYS false for new submissions)
-    await Feedback.create({
+    const newFeedback = await Feedback.create({
       name: trimmedName,
       rating: numRating,
       message: trimmedMessage,
       normalizedMessage: normalized,
       isApproved: false,
+    });
+
+    // Auto-create real activity notification for admin
+    await createNotification({
+      title: 'New Customer Feedback Received',
+      message: `${trimmedName} submitted a ${numRating}-star feedback review.`,
+      type: 'feedback',
+      action: 'feedback_received',
+      link: '/feedback',
+      metadata: { feedbackId: newFeedback._id, rating: numRating },
     });
 
     // 7. Enforce IP cooldown
@@ -193,6 +204,15 @@ export const updateFeedbackStatus = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Feedback not found.' });
     }
 
+    await createNotification({
+      title: isApproved ? 'Customer Feedback Approved' : 'Customer Feedback Hidden',
+      message: `Feedback review from "${updated.name}" was ${isApproved ? 'approved for public display' : 'hidden from public display'}.`,
+      type: 'feedback',
+      action: 'feedback_status_updated',
+      link: '/feedback',
+      metadata: { feedbackId: updated._id, isApproved },
+    });
+
     return res.status(200).json({
       success: true,
       message: isApproved ? 'Feedback approved.' : 'Feedback hidden.',
@@ -216,6 +236,15 @@ export const deleteFeedback = async (req, res, next) => {
     if (!deleted) {
       return res.status(404).json({ success: false, message: 'Feedback not found.' });
     }
+
+    await createNotification({
+      title: 'Customer Feedback Deleted',
+      message: `Feedback review from "${deleted.name}" was deleted permanently.`,
+      type: 'feedback',
+      action: 'feedback_deleted',
+      link: '/feedback',
+      metadata: { feedbackId: id },
+    });
 
     return res.status(200).json({
       success: true,

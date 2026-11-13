@@ -13,8 +13,8 @@ const Login = () => {
   const [error, setError]       = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // Already authenticated → go to gallery
-  if (!loading && admin) return <Navigate to="/gallery" replace />;
+  // Already authenticated → go to dashboard
+  if (!loading && admin) return <Navigate to="/dashboard" replace />;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
