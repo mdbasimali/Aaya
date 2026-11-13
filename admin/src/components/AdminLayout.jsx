@@ -5,7 +5,6 @@ import {
   Users,
   Images,
   MessageSquare,
-  Settings,
   LogOut,
   Menu,
   ChevronLeft,
@@ -29,7 +28,6 @@ const NAV_ITEMS = [
   { to: '/staff', label: 'Staff Management', icon: Users },
   { to: '/gallery', label: 'Gallery', icon: Images },
   { to: '/feedback', label: 'Feedback', icon: MessageSquare },
-  { to: '/settings', label: 'Settings', icon: Settings },
 ];
 
 // Helper to compute clean human-friendly relative time

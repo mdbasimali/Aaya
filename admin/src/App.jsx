@@ -8,7 +8,6 @@ import BookingsAdmin from './pages/BookingsAdmin';
 import StaffAdmin from './pages/StaffAdmin';
 import Gallery from './pages/Gallery';
 import FeedbackAdmin from './pages/FeedbackAdmin';
-import SettingsAdmin from './pages/SettingsAdmin';
 
 function App() {
   return (
@@ -69,17 +68,6 @@ function App() {
               <ProtectedRoute>
                 <AdminLayout>
                   <FeedbackAdmin />
-                </AdminLayout>
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                <AdminLayout>
-                  <SettingsAdmin />
                 </AdminLayout>
               </ProtectedRoute>
             }
